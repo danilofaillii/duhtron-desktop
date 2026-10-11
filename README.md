@@ -7,15 +7,15 @@ L'app per computer di [duhtron.com](https://duhtron.com): una finestra tutta sua
 1. Spingi il codice su GitHub.
 2. Crea un tag di versione e spingilo:
    ```
-   git tag v1.0.0
-   git push origin v1.0.0
+   git tag v1.0.1
+   git push origin v1.0.1
    ```
 3. GitHub costruisce da solo i tre installer (5-10 minuti) e li mette in **Releases**:
-   - `DuhTron-1.0.0-Windows.exe`
-   - `DuhTron-1.0.0-Mac.dmg`
-   - `DuhTron-1.0.0-Linux.AppImage` e `.deb`
+   - `DuhTron-1.0.1-Windows.exe`
+   - `DuhTron-1.0.1-Mac.dmg`
+   - `DuhTron-1.0.1-Linux.AppImage` e `.deb`
 4. I link da mettere sul sito puntano sempre all'ultima versione:
-   - https://github.com/danilofaillii/duhtron-desktop/releases/latest/download/DuhTron-1.0.0-Windows.exe
+   - https://github.com/danilofaillii/duhtron-desktop/releases/latest/download/DuhTron-1.0.1-Windows.exe
    - oppure alla pagina: https://github.com/danilofaillii/duhtron-desktop/releases/latest
 
 ## Avvisi di sicurezza

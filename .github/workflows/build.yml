@@ -1,11 +1,16 @@
 name: Costruisci gli installer
 
-# Parte quando spingi un tag di versione (v1.0.0, v1.0.1…)
-# e pubblica gli installer nella pagina Releases del repository.
+# Parte quando pubblichi una release con un tag di versione (v1.0.1, v1.0.2…)
+# oppure a mano dalla scheda Actions indicando il tag.
+# Costruisce i tre installer e li aggancia alla release di quel tag.
 on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag della release a cui agganciare i file (es. v1.0.1)'
+        required: true
 
 permissions:
   contents: write
@@ -18,12 +23,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm install
-      - run: npx electron-builder --publish always
+      - name: Costruisci
+        run: npx electron-builder --publish never
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Niente firma: su Mac e Windows comparirà l'avviso "autore sconosciuto"
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - name: Aggancia gli installer alla release
+        shell: bash
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          shopt -s nullglob
+          FILES=(dist/*.exe dist/*.dmg dist/*.AppImage dist/*.deb)
+          echo "Carico: ${FILES[*]} su $TAG"
+          gh release upload "$TAG" "${FILES[@]}" --clobber --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
